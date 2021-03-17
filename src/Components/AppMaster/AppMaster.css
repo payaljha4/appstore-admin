@@ -1,0 +1,21 @@
+
+.col-lg-6 {
+    -webkit-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 100%;
+}
+.card-body{
+    padding:23px 20px 23px 20px;
+
+}
+button{
+    float:right;
+    margin: 6px;
+}
+.card-header{
+    display: flex;
+    justify-content: space-between;
+}
+.mui_table_css{
+    white-space: nowrap;
+}
