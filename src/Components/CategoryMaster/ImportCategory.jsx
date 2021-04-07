@@ -11,6 +11,7 @@ import {
   CCardFooter,
   CButton,
   CSelect,
+  CLink,
   CInputFile,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
@@ -18,6 +19,7 @@ import axios from "axios";
 const ImportCategory = () => {
   const [Importcategory, setImportCategory] = useState({});
   const fetchData = () => {
+    
     const formData = new FormData();
     formData.append("upload_file", Importcategory.files);
     axios({
@@ -28,12 +30,18 @@ const ImportCategory = () => {
       },
       data: formData,
     })
-      .then((response) => {
-        setImportCategory(response?.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .then((response) => {
+      console.log("success:", response);
+      alert('Category has been added')
+      window.location.href="#/category-master"
+      setImportCategory(response?.data);
+      window.location.reload()
+    })
+    .catch((error) => {
+      console.log("Error",error);
+      alert('Something Went Wrong')
+      window.location.reload()
+    });
   };
 
   const handleChange = (event) => {
@@ -63,15 +71,17 @@ const ImportCategory = () => {
                       multiple
                       custom
                       onChange={handleChange}
+                      class="form-control"
                     />
-                    <CLabel htmlFor="file-multiple-input" variant="custom-file">
+                    {/* <CLabel htmlFor="file-multiple-input" variant="custom-file">
                       Choose Files...
-                    </CLabel>
+                    </CLabel> */}
                   </CFormGroup>
                 </CCol>
               </CFormGroup>
             </CCardBody>
             <CCardFooter>
+             
               <CButton
                 type="submit"
                 size="sm"
@@ -80,8 +90,16 @@ const ImportCategory = () => {
               >
                 <CIcon name="cil-scrubber" /> Submit
               </CButton>
-              <CButton type="reset" size="sm" color="danger">
+              
+              <CLink to="/category-master">
+              <CButton  type="reset" size="sm" color="danger">
                 <CIcon name="cil-ban" /> Cancel
+              </CButton>
+              </CLink>
+              <CButton  role="button" class=" btn btn-info">
+              <a href="Category-Master.xlsx" download="Category-Master.xlsx">
+                Sample CSV
+              </a>
               </CButton>
             </CCardFooter>
           </CCard>

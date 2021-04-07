@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./CategoryMaster.css";
+import "./CountryMaster.css";
 import MUIDataTable from "mui-datatables";
 import {
   CBadge,
@@ -9,17 +9,16 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CButton,
   CLink
 } from "@coreui/react";
 import axios from "axios";
 
-const CategoryMasterList = () => {
+const CountryMasterList = () => {
   let [responseData, setResponseData] = React.useState("");
   const fetchData = React.useCallback(() => {
     axios({
       method: "GET",
-      url: "http://appstore.infoware.xyz/api/v1/category-master/",
+      url: "http://appstore.infoware.xyz/api/v1/country-master/",
       headers: {
         "content-type": "application/json",
       },
@@ -38,8 +37,8 @@ const CategoryMasterList = () => {
 
   const columns = [
     {
-      name: "category_name",
-      label: "Category Name",
+      name: "country_name",
+      label: "Country Name",
       options: {
         filter: true,
         sort: true,
@@ -84,28 +83,22 @@ const CategoryMasterList = () => {
       <CCol xs="12" lg="6">
         <CCard>
           <CCardHeader>
-            Category Master List
-
-            <CLink to="/import-category">
-              <CButton  type="button" size="sm" color="primary">
-                 Import
-              </CButton>
+            Country Master List
+            <CLink to="/import-country-master">
+              <button  type="submit" size="sm" color="primary" class="btn btn-primary btn-sm"> 
+              Import
+              </button>
               </CLink>
-            <CLink to="/category-master-add">
-              <CButton
-                type="button"
-                size="sm"
-                color="primary"
-                
-              >
-                 Add Category
-              </CButton>
-              </CLink>
-              
+            <CLink to="/country-master-add" className="link-head">
+              <button class="btn btn-primary btn-sm" type="button">
+                Add Country
+              </button>
+            </CLink>
+            
           </CCardHeader>
           <CCardBody>
             <MUIDataTable
-              title={"Category List"}
+              title={"Country List"}
               data={responseData.data}
               columns={columns}
               options={options}
@@ -117,4 +110,4 @@ const CategoryMasterList = () => {
   );
 };
 
-export default CategoryMasterList;
+export default CountryMasterList;

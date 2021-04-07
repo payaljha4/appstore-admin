@@ -11,40 +11,45 @@ import {
   CCardFooter,
   CButton,
   CSelect,
-  CLink,
+  CLink
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "axios";
-
-const CategoryMasterAdd = () => {
-  const [categoryAdd, setCategoryAdd] = useState({});
-
+import {Link} from 'react-router-dom';
+const CountryMasterAdd = () => {
+  const [countryAdd, setCountryAdd] = useState({});
   const fetchData = () => {
-    console.log(categoryAdd);
-    // return
+    
+    console.log(countryAdd);
     const formingData = new FormData();
-    formingData.append("category_name", categoryAdd.categoryName);
-    formingData.append("status", categoryAdd.status);
-    axios
-      .post("http://appstore.infoware.xyz/api/v1/category-master/", formingData)
-      .then((response) => {
-        console.log("success:", response);
-        alert("Category has been added");
-        window.location.href = "#/category-master";
-        setCategoryAdd(response?.data);
-      })
-      .catch((error) => {
-        console.log("Error", error);
-        alert("Something Went Wrong");
-        window.location.reload();
-      });
+    formingData.append("country_name", countryAdd.countryName);
+    formingData.append("status",  countryAdd.status);
+    axios({
+      method: "POST",
+      url: "http://appstore.infoware.xyz/api/v1/country-master/",
+      headers: {
+        "content-type": 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
+      },
+      data:formingData,
+    })
+    .then((response) => {
+      console.log("success:", response);
+      alert('Country has been added')
+      window.location.href="#/country-master"
+      setCountryAdd(response?.data);
+    })
+    .catch((error) => {
+      console.log("Error",error);
+      alert('Something Went Wrong')
+      window.location.reload()
+    });
   };
 
   let [responseData, setResponseData] = React.useState("");
   const listOfdata = React.useCallback(() => {
     axios({
       method: "GET",
-      url: "http://appstore.infoware.xyz/api/v1/category-master/",
+      url: "http://appstore.infoware.xyz/api/v1/country-master/",
       headers: {
         "content-type": "application/json",
       },
@@ -62,19 +67,20 @@ const CategoryMasterAdd = () => {
   }, [listOfdata]);
 
   const handleChange = (event) => {
-    setCategoryAdd((prevState) => ({
+    setCountryAdd((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
   };
+
   const sameName = () => {
-    var sameCategoryName = responseData.data
-      .filter((item) => item.category_name === categoryAdd.categoryName)
-      .map((item) => item.category_name);
+    var sameCountryName = responseData.data
+      .filter((item) => item.country_name === countryAdd.countryName)
+      .map((item) => item.country_name);
     debugger;
-    console.log(sameCategoryName);
-    if (sameCategoryName[0] === categoryAdd.categoryName) {
-      alert("Category Name is Already Added");
+    console.log(sameCountryName);
+    if (sameCountryName[0] === countryAdd.countryName) {
+      alert("Country Name is Already Added");
       window.location.reload();
     } else fetchData();
   };
@@ -84,7 +90,10 @@ const CategoryMasterAdd = () => {
       <CRow>
         <CCol xs="12" sm="6">
           <CCard>
-            <CCardHeader>Add Category Master</CCardHeader>
+            <CCardHeader>
+              Add Country Master
+              
+            </CCardHeader>
             <CCardBody>
               <CFormGroup
                 row
@@ -93,14 +102,13 @@ const CategoryMasterAdd = () => {
               >
                 <CCol xs="6">
                   <CFormGroup>
-                    <CLabel>Category Name</CLabel>
+                    <CLabel>Country Name</CLabel>
                     <CInput
-                      // customname="categoryName"
-                      name="categoryName"
-                      id="categoryName"
-                      placeholder="Enter the Category Name"
+                      custom
+                      name="countryName"
+                      id="countryName"
+                      placeholder="Enter the Country Name"
                       onChange={handleChange}
-                      required
                     />
                   </CFormGroup>
                 </CCol>
@@ -115,7 +123,7 @@ const CategoryMasterAdd = () => {
                       id="status"
                       onChange={handleChange}
                     >
-                      <option>Select Status</option>
+                       <option >Select Status</option>
                       <option value="Active">Active</option>
                       <option value="Inactive">Inactive</option>
                     </CSelect>
@@ -141,6 +149,7 @@ const CategoryMasterAdd = () => {
               </CFormGroup> */}
             </CCardBody>
             <CCardFooter>
+           
               <CButton
                 type="submit"
                 size="sm"
@@ -151,11 +160,11 @@ const CategoryMasterAdd = () => {
               >
                 <CIcon name="cil-scrubber" /> Submit
               </CButton>
-
-              <CLink to="/category-master">
-                <CButton type="reset" size="sm" color="danger">
-                  <CIcon name="cil-ban" /> Cancel
-                </CButton>
+              
+              <CLink to="/country-master">
+              <CButton type="reset" size="sm" color="danger">
+                <CIcon name="cil-ban" /> Cancel
+              </CButton>
               </CLink>
             </CCardFooter>
           </CCard>
@@ -166,4 +175,4 @@ const CategoryMasterAdd = () => {
   );
 };
 
-export default CategoryMasterAdd;
+export default CountryMasterAdd;

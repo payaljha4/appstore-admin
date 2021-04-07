@@ -16,15 +16,15 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "axios";
-const ImportLanguage = () => {
-  const [Importlanguage, setImportLanguage] = useState({});
+const ImportCountry = () => {
+  const [Importcountry, setImportCountry] = useState({});
   const fetchData = () => {
-   
+    
     const formData = new FormData();
-    formData.append("upload_file", Importlanguage.files);
+    formData.append("upload_file", Importcountry.files);
     axios({
       method: "POST",
-      url: "http://appstore.infoware.xyz/api/v1/upload-excel-language-master/",
+      url: "http://appstore.infoware.xyz/api/v1/upload-excel-country-master/",
       headers: {
         "content-type": "multipart/form-data",
       },
@@ -32,9 +32,9 @@ const ImportLanguage = () => {
     })
     .then((response) => {
       console.log("success:", response);
-      alert('Language has been added')
-      window.location.href="#/language-master"
-      setImportLanguage(response?.data);
+      alert('Country has been added')
+      window.location.href="#/country-master"
+      setImportCountry(response?.data);
       window.location.reload()
     })
     .catch((error) => {
@@ -46,7 +46,7 @@ const ImportLanguage = () => {
 
   const handleChange = (event) => {
     debugger;
-    setImportLanguage((prevState) => ({
+    setImportCountry((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.files[0],
     }));
@@ -56,7 +56,7 @@ const ImportLanguage = () => {
       <CRow>
         <CCol xs="12" sm="6">
           <CCard>
-            <CCardHeader>Import Language</CCardHeader>
+            <CCardHeader>Import Country</CCardHeader>
             <CCardBody>
               <CFormGroup
                 row
@@ -81,24 +81,23 @@ const ImportLanguage = () => {
               </CFormGroup>
             </CCardBody>
             <CCardFooter>
-             
+              
               <CButton
                 type="submit"
                 size="sm"
                 color="primary"
                 onClick={() => fetchData()}
-                
               >
                 <CIcon name="cil-scrubber" /> Submit
               </CButton>
               
-              <CLink to="/language-master">
+              <CLink to="/country-master">
               <CButton type="reset" size="sm" color="danger">
                 <CIcon name="cil-ban" /> Cancel
               </CButton>
               </CLink>
               <CButton  role="button" class=" btn btn-info">
-              <a href="Language-Master.xlsx" download="Language-Master.xlsx">
+              <a href="Country-Master.xlsx" download="Country-Master.xlsx">
                 Sample CSV
               </a>
               </CButton>
@@ -111,4 +110,4 @@ const ImportLanguage = () => {
   );
 };
 
-export default ImportLanguage;
+export default ImportCountry;

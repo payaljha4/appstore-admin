@@ -15,6 +15,7 @@ import {
   CButton,
   CSelect,
   CInputFile,
+  CLink,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "axios";
@@ -22,26 +23,27 @@ import { useState } from "react";
 const AppMasterAdd = () => {
   const [AppData, setAppData] = useState({});
   const fetchData = () => {
+    
     const formingData = new FormData();
-    formingData.append("app_id", AppData.appId);
-    formingData.append("app_name", AppData.appName);
-    formingData.append("age_group", AppData.ageGroup);
-    formingData.append("device_type", AppData.deviceType);
-    formingData.append("device_os", AppData.deviceOs);
+    formingData.append("app_id", AppData.app_id);
+    formingData.append("app_name", AppData.app_name);
+    formingData.append("age_group", AppData.age_group);
+    formingData.append("device_type", AppData.device_type);
+    formingData.append("device_os", AppData.device_os);
     formingData.append("keywords", AppData.keywords);
     formingData.append("country", AppData.country);
     formingData.append("category", AppData.category);
-    formingData.append("sub_category", AppData.subCategory);
+    formingData.append("sub_category", AppData.sub_category);
     formingData.append("language", AppData.language);
-    formingData.append("developed_by", AppData.developedBy);
-    formingData.append("app_url", AppData.appUrl);
-    formingData.append("app_support", AppData.appSupport);
-    formingData.append("short_description", AppData.shortDescription);
-    formingData.append("long_description", AppData.longDescription);
+    formingData.append("developed_by", AppData.developed_by);
+    formingData.append("app_url", AppData.app_url);
+    formingData.append("app_support", AppData.app_support);
+    formingData.append("short_description", AppData.short_description);
+    formingData.append("long_description", AppData.long_description);
     formingData.append("app_icon",AppData.files);
-    formingData.append("media_1_url", AppData.media1Url);
-    formingData.append("media_2_url", AppData.media2Url);
-    formingData.append(" media_3_url", AppData.media3Url);
+    formingData.append("media_1_url", AppData.media_1_url);
+    formingData.append("media_2_url", AppData.media_2_url);
+    formingData.append(" media_3_url", AppData.media_3_url);
     axios({
       method: "POST",
       url: "http://appstore.infoware.xyz/api/v1/app-master/",
@@ -73,20 +75,58 @@ const AppMasterAdd = () => {
       //   country:AppData.country
       // },
     })
+    .then((response) => {
+      console.log("success:", response);
+      alert('App has been added')
+      window.location.href="#/app-master"
+      setAppData(response?.data);
+      window.location.reload()
+    })
+    .catch((error) => {
+      console.log("Error",error);
+      alert('Something Went Wrong')
+      window.location.reload()
+    });
+  };
+
+  let [responseData, setResponseData] = React.useState("");
+  const listOfdata = React.useCallback(() => {
+    axios({
+      method: "GET",
+      url: "http://appstore.infoware.xyz/api/v1/app-master/",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
       .then((response) => {
-        setAppData(response?.data);
+        debugger;
+        setResponseData({ data: response?.data });
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }, []);
+  React.useEffect(() => {
+    listOfdata();
+  }, [listOfdata]);
+
   const handleChange = (event) => {
     setAppData((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
   };
-
+  const sameName = () => {
+    var sameAppName = responseData.data
+      .filter((item) => item.app_name === AppData.app_name)
+      .map((item) => item.app_name);
+    debugger;
+    console.log(sameAppName);
+    if (sameAppName[0] === AppData.app_name) {
+      alert("App Name is Already Added");
+      window.location.reload();
+    } else fetchData();
+  };
   let [formData, setformData] = React.useState("");
   const fetchingData = React.useCallback(() => {
     axios({
@@ -150,7 +190,7 @@ const AppMasterAdd = () => {
       const fetchingData3 = React.useCallback(() => {
         axios({
           method: "GET",
-          url: "http://appstore.infoware.xyz/api/v1/location-master/",
+          url: "http://appstore.infoware.xyz/api/v1/country-master/",
           headers: {
             "content-type": "application/json",
           },
@@ -199,9 +239,7 @@ const AppMasterAdd = () => {
           <CCard>
             <CCardHeader>
               Add App Master
-            <Link to="/import-app-master" className="link-head">
-            <CButton type="submit" size="sm" color="primary"><FilesDemo /></CButton>
-            </Link>  
+          
             </CCardHeader>
 
             <CCardBody onSubmit={(e) => e.preventDefault()}>
@@ -212,7 +250,7 @@ const AppMasterAdd = () => {
                     <CInput
                       id="appId"
                       custom
-                      name="appId"
+                      name="app_id"
                       placeholder="Enter the App Id"
                       onChange={handleChange}
                     />
@@ -224,7 +262,7 @@ const AppMasterAdd = () => {
                     <CInput
                       id="appName"
                       custom
-                      name="appName"
+                      name="app_name"
                       placeholder="Enter the App name"
                       onChange={handleChange}
                     />
@@ -238,7 +276,7 @@ const AppMasterAdd = () => {
                     <CInput
                       id="ageGroup"
                       custom
-                      name="ageGroup"
+                      name="age_group"
                       placeholder="Age Group"
                       onChange={handleChange}
                     />
@@ -250,7 +288,7 @@ const AppMasterAdd = () => {
                     <CInput
                       id=" deviceType"
                       custom
-                      name="deviceType"
+                      name="device_type"
                       placeholder="Enter the Device type"
                       onChange={handleChange}
                     />
@@ -263,7 +301,7 @@ const AppMasterAdd = () => {
                     <CLabel>Device OS</CLabel>
                     <CSelect
                       custom
-                      name="deviceOs"
+                      name="device_os"
                       id="deviceOs"
                       value={formData2.data?.id}
                       onChange={handleChange}
@@ -328,11 +366,11 @@ const AppMasterAdd = () => {
                                 value={country.id}
                                 selected
                               >
-                                {country.country}
+                                {country.country_name}
                               </option>
                             ) : (
                               <option key={country.id} value={country.id}>
-                                {country.country}
+                                {country.country_name}
                               </option>
                             )
                           )
@@ -381,7 +419,7 @@ const AppMasterAdd = () => {
                     <CLabel>SubCategory</CLabel>
                     <CSelect
                       custom
-                      name="subCategory"
+                      name="sub_category"
                       id="select"
                       value={formData1.data?.id}
                       onChange={handleChange}
@@ -450,9 +488,9 @@ const AppMasterAdd = () => {
                   <CFormGroup>
                     <CLabel>Developed By</CLabel>
                     <CInput
-                      id="developedBy"
+                      id="developed_by"
                       custom
-                      name="developedBy"
+                      name="developed_by"
                       placeholder="developed By"
                       onChange={handleChange}
                     />
@@ -462,9 +500,9 @@ const AppMasterAdd = () => {
                   <CFormGroup>
                     <CLabel>App Url</CLabel>
                     <CInput
-                      id="appUrl"
+                      id="app_url"
                       custom
-                      name="appUrl"
+                      name="app_url"
                       placeholder="app url"
                       onChange={handleChange}
                     />
@@ -476,9 +514,9 @@ const AppMasterAdd = () => {
                   <CFormGroup>
                     <CLabel>App Support</CLabel>
                     <CInput
-                      id="appSupport"
+                      id="app_support"
                       custom
-                      name="appSupport"
+                      name="app_support"
                       placeholder="app support"
                       onChange={handleChange}
                     />
@@ -488,10 +526,10 @@ const AppMasterAdd = () => {
                   <CFormGroup>
                     <CLabel>Long Description</CLabel>
                     <CInput
-                      id="longDescription"
+                      id="long_description"
                       placeholder="long description"
                       custom
-                      name="longDescription"
+                      name="long_description"
                       onChange={handleChange}
                     />
                   </CFormGroup>
@@ -502,38 +540,39 @@ const AppMasterAdd = () => {
                   <CFormGroup>
                     <CLabel>Short Description</CLabel>
                     <CInput
-                      id="shortDescription"
+                      id="short_description"
                       custom
-                      name="shortDescription"
+                      name="short_description"
                       placeholder="short Description"
                       onChange={handleChange}
                     />
                   </CFormGroup>
                 </CCol>
+                
                 <CCol xs="6">
                   <CFormGroup>
-                    <CLabel>App Icon</CLabel>
-                      <CInputFile
+                  <CLabel>App Icon</CLabel>
+                    <CInputFile
                       id="file-multiple-input"
                       name="files"
                       multiple
                       custom
                       onChange={handleChange1}
+                      class="form-control"
                     />
-                    <CLabel htmlFor="file-multiple-input" variant="custom-file">
-                      Choose Files...
-                    </CLabel>
+                    
                   </CFormGroup>
                 </CCol>
               </CFormGroup>
+              
               <CFormGroup row className="my-0">
                 <CCol xs="6">
                   <CFormGroup>
                     <CLabel>Media 1 URL</CLabel>
                     <CInput
-                      id="media1Url"
+                      id="media_1_url"
                       custom
-                      name="media1Url"
+                      name="media_1_url"
                       placeholder="media 1 url"
                       onChange={handleChange}
                     />
@@ -543,9 +582,9 @@ const AppMasterAdd = () => {
                   <CFormGroup>
                     <CLabel>Media 2 URL</CLabel>
                     <CInput
-                      id="media2Url"
+                      id="media_2_url"
                       custom
-                      name="media2Url"
+                      name="media_2_url"
                       placeholder="media 2 url"
                       onChange={handleChange}
                     />
@@ -557,9 +596,9 @@ const AppMasterAdd = () => {
                   <CFormGroup>
                     <CLabel>Media 3 URL</CLabel>
                     <CInput
-                      id="media3Url"
+                      id="media_3_url"
                       custom
-                      name="media3Url"
+                      name="media_3_url"
                       placeholder="media 3 url"
                       onChange={handleChange}
                     />
@@ -568,17 +607,23 @@ const AppMasterAdd = () => {
               </CFormGroup>
             </CCardBody>
             <CCardFooter>
+              
               <CButton
                 type="submit"
                 size="sm"
                 color="primary"
-                onClick={() => fetchData()}
+                onClick={() => {
+                  sameName();
+                }}
               >
                 <CIcon name="cil-scrubber" /> Submit
               </CButton>
+             
+              <CLink to="/app-master">
               <CButton type="reset" size="sm" color="danger">
                 <CIcon name="cil-ban" /> Cancel
               </CButton>
+              </CLink>
             </CCardFooter>
           </CCard>
         </CCol>

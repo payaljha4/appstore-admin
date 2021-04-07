@@ -8,7 +8,9 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CRow
+  CRow,
+  CButton,
+  CLink
 } from '@coreui/react'
 
 const AppMasterList = () => {
@@ -66,7 +68,8 @@ const AppMasterList = () => {
         sort: true,
       },
     },
-   
+
+    
     {
       name: "keywords",
       label: "Keywords",
@@ -76,6 +79,21 @@ const AppMasterList = () => {
       },
     },
     
+    {
+      name: "country",
+      label: "Country",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (country_name, tableMeta) => {
+          var country_name = tableMeta.rowData[5]?.country_name;
+          return <div>{country_name}</div>;
+        },
+      },
+    },
+
+    
+
     {
       name: "developed_by",
       label: "Developed By",
@@ -171,9 +189,13 @@ const AppMasterList = () => {
           <CCard>
             <CCardHeader>
              App Master List
-             <Link to="/app-master-add" className="link-head">
-             <button class="btn btn-primary btn-sm" type="button">Add App</button>
-             </Link>
+             <CLink to="/import-app-master">
+             <CButton type="button" size="sm" color="primary" >Import</CButton>
+             </CLink>
+            <CLink to="/app-master-add" >
+             <CButton  class="btn btn-primary btn-sm" type="button">Add App</CButton>
+             </CLink>
+              
             </CCardHeader>
             <CCardBody>
             <MUIDataTable
